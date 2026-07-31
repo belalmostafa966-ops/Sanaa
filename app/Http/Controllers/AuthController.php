@@ -21,7 +21,7 @@ class AuthController extends Controller
             'name'     => ['required', 'string', 'max:255'],
             'email'    => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
-            'role'     => ['required', 'in:client,worker'], // التأكد من اختيار أحد الخيارين
+            'role'     => ['required', 'in:client,worker,admin'], // إضافة admin لقائمة الأدوار المسموحة
         ]);
 
         // 2. Create User
@@ -63,9 +63,13 @@ class AuthController extends Controller
         ])->onlyInput('email');
     }
 
-    // دالة مساعدة للتوجيه حسب الدور
+    // دالة مساعدة للتوجيه حسب الدور (تتضمن دور الأدمن الآن)
     protected function redirectBasedOnRole($user)
     {
+        if ($user->role === 'admin') {
+            return redirect()->route('admin.dashboard');
+        }
+
         if ($user->role === 'worker') {
             return redirect()->route('worker.dashboard');
         }

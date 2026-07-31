@@ -1,60 +1,57 @@
 <?php
 
 use App\Http\Controllers\AuthController;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
-| Web Routes - مسارات التطبيق
+| Web Routes
 |--------------------------------------------------------------------------
 */
 
-// الصفحة الرئيسية: تفحص حالة المستخدم وتوجهه حسب نوع الحساب لتجنب Infinite Redirect
+// 1. الصفحة الرئيسية (Home / Landing Page) - تفتح للجميع
 Route::get('/', function () {
-    if (Auth::check()) {
-        return Auth::user()->role === 'worker' 
-            ? redirect()->route('worker.dashboard') 
-            : redirect()->route('client.dashboard');
-    }
-    return redirect()->route('login');
-});
+    return view('home');
+})->name('home');
 
 
-// ==========================================
-// 1. مسارات الزوار (Guest Routes)
-// (المستخدم المسجل لا يستطيع دخول هذه الصفحات)
-// ==========================================
-Route::middleware('guest')->group(function () {
 
-    // تسجيل حساب جديد
+// Register
     Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
     Route::post('/register', [AuthController::class, 'register']);
 
-    // تسجيل الدخول
+// 2. مسارات الزوار (Guest Routes)
+// يوجه تلقائياً بعيداً عنها لو المستخدم عامل تسجيل دخول بالفعل
+Route::middleware('guest')->group(function () {
+    
+    
+    // Login
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
     Route::post('/login', [AuthController::class, 'login']);
-
+    
 });
 
 
-// ==========================================
-// 2. مسارات المسجلين (Authenticated Routes)
-// (تتطلب تسجيل الدخول للوصول إليها)
-// ==========================================
+// 3. مسارات المستخدمين المسجلين (Authenticated Routes)
 Route::middleware('auth')->group(function () {
 
-    // لوحة تحكم العميل
+    // Dashboard الأدمن (Admin)
+    Route::get('/admin/dashboard', function () {
+        return view('admin.dashboard');
+    })->name('admin.dashboard');
+
+    // Dashboard العملاء (Client)
     Route::get('/client/dashboard', function () {
         return view('client.dashboard');
     })->name('client.dashboard');
 
-    // لوحة تحكم الصنايعي
+    // Dashboard الفنيين / الصنايعية (Worker)
     Route::get('/worker/dashboard', function () {
         return view('worker.dashboard');
     })->name('worker.dashboard');
 
-    // تسجيل الخروج
-    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-
 });
+
+
+// 4. مسار تسجيل الخروج (Logout)
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');

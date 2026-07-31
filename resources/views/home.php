@@ -975,6 +975,16 @@
 
 </main>
 
+<div>
+  <!-- Form تسجيل الخروج -->
+  <form action="{{ route('logout') }}" method="POST" style="display: inline;">
+      <input type="hidden" name="_token" value="{{ csrf_token() }}">
+      <button type="submit" class="btn-logout">
+          تسجيل الخروج
+      </button>
+  </form>
+</div>
+
 <footer>
   <div class="wrap">
     <div class="foot-grid">
@@ -1043,6 +1053,7 @@
     </button>
   </div>
 </div>
+
 
 <script>
 (function(){

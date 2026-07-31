@@ -18,7 +18,7 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             // إضافة عمود الـ role وتحديد قيمة افتراضية مثلاً 'client'
-            $table->enum('role', ['client', 'worker'])->default('client');
+            $table->enum('role', ['client', 'worker', 'admin'])->default('client');
             $table->rememberToken();
             $table->timestamps();
         });
