@@ -15,20 +15,18 @@ Route::get('/', function () {
 })->name('home');
 
 
-
-// Register
-    Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
-    Route::post('/register', [AuthController::class, 'register']);
-
 // 2. مسارات الزوار (Guest Routes)
 // يوجه تلقائياً بعيداً عنها لو المستخدم عامل تسجيل دخول بالفعل
 Route::middleware('guest')->group(function () {
-    
-    
+
+    // Register
+    Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
+    Route::post('/register', [AuthController::class, 'register']);
+
     // Login
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
-    Route::post('/login', [AuthController::class, 'login']);
-    
+    Route::post('/login', [AuthController::class, 'login'])->name('login.submit');
+
 });
 
 

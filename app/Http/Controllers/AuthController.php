@@ -16,15 +16,13 @@ class AuthController extends Controller
 
     public function register(Request $request)
     {
-        // 1. Validation
         $fields = $request->validate([
             'name'     => ['required', 'string', 'max:255'],
             'email'    => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
-            'role'     => ['required', 'in:client,worker,admin'], // إضافة admin لقائمة الأدوار المسموحة
+            'role'     => ['required', 'in:client,worker,admin'],
         ]);
 
-        // 2. Create User
         $user = User::create([
             'name'     => $fields['name'],
             'email'    => $fields['email'],
@@ -32,10 +30,8 @@ class AuthController extends Controller
             'role'     => $fields['role'],
         ]);
 
-        // 3. Login
         Auth::login($user);
 
-        // 4. Redirect based on role
         return $this->redirectBasedOnRole($user);
     }
 
@@ -53,8 +49,6 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials, $request->remember)) {
             $request->session()->regenerate();
-
-            // التوجيه للداش بورد المناسبة حسب الـ role
             return $this->redirectBasedOnRole(Auth::user());
         }
 
@@ -63,7 +57,6 @@ class AuthController extends Controller
         ])->onlyInput('email');
     }
 
-    // دالة مساعدة للتوجيه حسب الدور (تتضمن دور الأدمن الآن)
     protected function redirectBasedOnRole($user)
     {
         if ($user->role === 'admin') {
