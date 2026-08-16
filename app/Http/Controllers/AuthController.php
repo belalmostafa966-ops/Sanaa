@@ -20,7 +20,9 @@ class AuthController extends Controller
             'name'     => ['required', 'string', 'max:255'],
             'email'    => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
-            'role'     => ['required', 'in:client,worker,admin'],
+            // ملاحظة أمنية: "admin" اتشالت من هنا عمداً. حساب الأدمن
+            // لازم يتعمل من الداتابيز/Seeder مباشرة، مش من فورم عام يقدر أي زائر يوصله.
+            'role'     => ['required', 'in:client,worker'],
         ]);
 
         $user = User::create([

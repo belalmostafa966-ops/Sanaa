@@ -42,11 +42,48 @@ class User extends Authenticatable
      *
      * @return array<string, string>
      */
-    protected function casts(): array
+   protected function casts(): array
     {
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
     }
+
+    // الطلبات اللي العميل ده طلبها
+    public function jobRequests()
+    {
+        return $this->hasMany(JobRequest::class, 'client_id');
+    }
+
+    // الطلبات اللي الصنايعي ده متكلف بيها
+    public function assignedJobs()
+    {
+        return $this->hasMany(JobRequest::class, 'assigned_worker_id');
+    }
+
+    // عروض الأسعار اللي الصنايعي بعتها
+    public function offers()
+    {
+        return $this->hasMany(Offer::class, 'worker_id');
+    }
+
+    // شغل البورتفوليو بتاع الصنايعي
+    public function portfolioItems()
+    {
+        return $this->hasMany(PortfolioItem::class, 'worker_id');
+    }
+
+    // التقييمات اللي العميل ده كتبها
+    public function reviewsGiven()
+    {
+        return $this->hasMany(Review::class, 'client_id');
+    }
+
+    // التقييمات اللي الصنايعي ده اتقيّم بيها
+    public function reviewsReceived()
+    {
+        return $this->hasMany(Review::class, 'worker_id');
+    }
+
 }
