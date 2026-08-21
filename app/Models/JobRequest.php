@@ -48,4 +48,10 @@ class JobRequest extends Model
     {
         return $this->hasOne(Review::class);
     }
+
+    // الدفع بتاع الطلب ده (بيتعمل لما الطلب يقفل)
+    public function payment()
+    {
+        return $this->hasOne(Payment::class);
+    }
 }

@@ -131,13 +131,13 @@ a{color:inherit; text-decoration:none;}
     <div class="field">
       <label>نوع الحساب</label>
       <div class="role-options">
-        <label class="role-card {{ old('role') == 'worker' ? 'checked' : '' }}" id="roleWorkerCard">
-          <input type="radio" name="role" value="worker" {{ old('role') == 'worker' ? 'checked' : '' }} onchange="updateRoleUI()">
+        <label class="role-card {{ old('role', request('role')) == 'worker' ? 'checked' : '' }}" id="roleWorkerCard">
+          <input type="radio" name="role" value="worker" {{ old('role', request('role')) == 'worker' ? 'checked' : '' }} onchange="updateRoleUI()">
           <span class="emoji">🛠️</span>
           <span class="label">صنايعي</span>
         </label>
-        <label class="role-card {{ old('role') == 'client' ? 'checked' : '' }}" id="roleClientCard">
-          <input type="radio" name="role" value="client" {{ old('role') == 'client' ? 'checked' : '' }} onchange="updateRoleUI()">
+        <label class="role-card {{ old('role', request('role')) == 'client' ? 'checked' : '' }}" id="roleClientCard">
+          <input type="radio" name="role" value="client" {{ old('role', request('role')) == 'client' ? 'checked' : '' }} onchange="updateRoleUI()">
           <span class="emoji">🧑‍💼</span>
           <span class="label">عميل</span>
         </label>

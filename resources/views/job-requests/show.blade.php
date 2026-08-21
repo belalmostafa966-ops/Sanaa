@@ -93,8 +93,24 @@
     </div>
   @endif
 
-  {{-- العميل: فورم تقييم بعد الإغلاق --}}
-  @if($isOwner && $jobRequest->status === 'completed')
+  {{-- العميل: كارت الدفع الوهمي (بيظهر بعد ما الطلب يقفل) --}}
+  @if($isOwner && $jobRequest->status === 'completed' && $jobRequest->payment)
+    <div class="card" style="max-width:480px;">
+      <h3>الدفع</h3>
+      @if($jobRequest->payment->status === 'pending')
+        <p style="font-size:.85rem; color:var(--text-soft);">
+          الشغل خلص! ادفع قيمة العرض ({{ $jobRequest->payment->amount }} ج.م) عشان تقدر تقيّم الصنايعي.
+        </p>
+        <a href="{{ route('client.payments.show', $jobRequest) }}" class="btn btn-primary btn-sm">ادفع دلوقتي</a>
+      @else
+        <span class="badge ok">تم الدفع ✅</span>
+        <p style="font-size:.8rem; color:var(--text-soft); margin-top:6px;">رقم العملية: {{ $jobRequest->payment->transaction_ref }}</p>
+      @endif
+    </div>
+  @endif
+
+  {{-- العميل: فورم تقييم بعد الإغلاق والدفع --}}
+  @if($isOwner && $jobRequest->status === 'completed' && $jobRequest->payment && $jobRequest->payment->status === 'paid')
     <div class="card" style="max-width:480px;">
       <h3>قيّم الصنايعي</h3>
       @if($jobRequest->review)

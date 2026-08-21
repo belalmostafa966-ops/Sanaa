@@ -3,10 +3,12 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\JobRequestController;
 use App\Http\Controllers\OfferController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PortfolioItemController;
 use App\Http\Controllers\ReviewController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\PageController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -61,7 +63,11 @@ Route::middleware('auth')->group(function () {
         Route::post('/offers/{offer}/accept', [OfferController::class, 'accept'])->name('offers.accept');
         Route::post('/offers/{offer}/reject', [OfferController::class, 'reject'])->name('offers.reject');
 
-        // التقييم بعد إغلاق الطلب
+        // الدفع الوهمي (بيبقى متاح بعد إغلاق الطلب)
+        Route::get('/job-requests/{jobRequest}/pay', [PaymentController::class, 'show'])->name('payments.show');
+        Route::post('/job-requests/{jobRequest}/pay', [PaymentController::class, 'process'])->name('payments.process');
+
+        // التقييم بعد إغلاق الطلب والدفع
         Route::post('/job-requests/{jobRequest}/review', [ReviewController::class, 'store'])->name('reviews.store');
 
     });
@@ -94,6 +100,11 @@ Route::middleware('auth')->group(function () {
 Route::get('/workers/{worker}/portfolio', [PortfolioItemController::class, 'showForWorker'])->name('workers.portfolio');
 Route::get('/workers/{worker}/reviews', [ReviewController::class, 'forWorker'])->name('workers.reviews');
 
+// Public Information Pages
+Route::get('/faq', [PageController::class, 'faq'])->name('faq');
+Route::get('/support', [PageController::class, 'support'])->name('support');
+Route::get('/contact', [PageController::class, 'contact'])->name('contact');
+Route::get('/privacy', [PageController::class, 'privacy'])->name('privacy');
 
 // 4. مسار تسجيل الخروج (Logout)
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');

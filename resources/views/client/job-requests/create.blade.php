@@ -9,7 +9,7 @@
   </div>
 
   <div class="card" style="max-width:560px;">
-    <form method="POST" action="{{ route('client.job-requests.store') }}">
+    <form method="POST" action="{{ route('client.job-requests.store') }}" enctype="multipart/form-data">
       @csrf
 
       <div class="form-field">
@@ -38,9 +38,15 @@
       </div>
 
       <div class="form-field">
-        <label>وصف المشكلة</label>
+        <label>وصف المشكلة (اختياري)</label>
         <textarea name="description" rows="5" placeholder="اشرح المشكلة بالتفصيل...">{{ old('description') }}</textarea>
         @error('description') <div class="error">{{ $message }}</div> @enderror
+      </div>
+
+      <div class="form-field">
+        <label>صورة المشكلة (اختياري)</label>
+        <input type="file" name="image" accept="image/*">
+        @error('image') <div class="error">{{ $message }}</div> @enderror
       </div>
 
       <button type="submit" class="btn btn-primary" style="width:100%; justify-content:center;">

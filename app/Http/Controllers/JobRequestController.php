@@ -43,11 +43,18 @@ class JobRequestController extends Controller
         $fields = $request->validate([
             'category_id' => ['nullable', 'exists:categories,id'],
             'title'       => ['required', 'string', 'max:255'],
-            'description' => ['required', 'string'],
+            'description' => ['nullable', 'string', 'max:2000'],
             'area'        => ['required', 'string', 'max:255'],
+            'image'       => ['nullable', 'image', 'max:2048'], // أقصى حجم 2 ميجا
         ]);
 
+        // لو المستخدم رفع صورة، نخزنها ونحفظ مسارها بس
+        if ($request->hasFile('image')) {
+            $fields['image'] = $request->file('image')->store('job-requests', 'public');
+        }
+
         $fields['client_id'] = Auth::id();
+        $fields['status'] = 'open';
 
         JobRequest::create($fields);
 
